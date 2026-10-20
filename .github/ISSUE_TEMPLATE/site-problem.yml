@@ -1,0 +1,39 @@
+name: Site problem
+description: An ad got through, or a site does not work with HUSH
+labels: [site]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Page address
+      placeholder: https://example.com/page
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What happened?
+      options:
+        - An ad, popup or banner is still showing
+        - The site is broken (video, login, layout, buttons…)
+        - The site says to turn off my ad blocker
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What you did, what you expected and what you saw instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: HUSH report
+      description: Click the HUSH icon, then "Site broken?", then "Copy report", and paste it here.
+      render: text
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 141, Brave 1.84…

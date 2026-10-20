@@ -1,0 +1,348 @@
+! Title: HUSH Filters
+! Description: HUSH's own filters — YouTube, Twitch, social media sponsored content, popunder networks and anti-adblock.
+! License: GPL-3.0-or-later
+! Homepage: https://github.com/mohitbansal25082006/HUSH
+
+! ───────────────────────────── YouTube ─────────────────────────────
+! Strip ad payloads from the player response before the player sees them
+youtube.com,youtube-nocookie.com##+js(json-prune, playerResponse.adPlacements playerResponse.playerAds playerResponse.adSlots adPlacements playerAds adSlots adBreakHeartbeatParams)
+youtube.com,youtube-nocookie.com##+js(json-prune-fetch-response, playerAds adPlacements adSlots playerResponse.playerAds playerResponse.adPlacements playerResponse.adSlots, , propsToMatch, /\/(player|get_watch)\?/)
+youtube.com,youtube-nocookie.com##+js(json-prune-xhr-response, playerAds adPlacements adSlots playerResponse.playerAds playerResponse.adPlacements playerResponse.adSlots, , propsToMatch, /\/player\?/)
+youtube.com##+js(set-constant, ytInitialPlayerResponse.playerAds, undefined)
+youtube.com##+js(set-constant, ytInitialPlayerResponse.adPlacements, undefined)
+youtube.com##+js(set-constant, ytInitialPlayerResponse.adSlots, undefined)
+youtube.com##+js(set-constant, playerResponse.adPlacements, undefined)
+! Home feed, search and sidebar ads
+youtube.com##ytd-ad-slot-renderer
+youtube.com##ytd-rich-item-renderer:has(> #content > ytd-ad-slot-renderer)
+youtube.com##ytd-in-feed-ad-layout-renderer
+youtube.com##ytd-promoted-sparkles-web-renderer
+youtube.com##ytd-promoted-video-renderer
+youtube.com##ytd-display-ad-renderer
+youtube.com##ytd-compact-promoted-video-renderer
+youtube.com##ytd-search-pyv-renderer
+youtube.com##ytd-banner-promo-renderer
+youtube.com##ytd-statement-banner-renderer
+youtube.com##ytd-primetime-promo-renderer
+youtube.com##ytd-brand-video-singleton-renderer
+youtube.com##ytd-brand-video-shelf-renderer
+youtube.com##ytd-merch-shelf-renderer
+youtube.com##ytd-player-legacy-desktop-watch-ads-renderer
+youtube.com##ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"]
+youtube.com###masthead-ad
+youtube.com###player-ads
+youtube.com##.ytd-mealbar-promo-renderer
+youtube.com##ytd-mealbar-promo-renderer
+youtube.com##.ytp-ad-overlay-container
+youtube.com##.ytp-ad-overlay-slot
+youtube.com##.ytp-featured-product
+youtube.com##.ytp-suggested-action
+youtube.com##ytd-reel-video-renderer:has(.ytd-ad-slot-renderer)
+youtube.com##ytd-reel-video-renderer:has(ytd-ad-slot-renderer)
+youtube.com##ytd-rich-section-renderer:has(ytd-statement-banner-renderer)
+youtube.com##tp-yt-paper-dialog:has(#feedback.ytd-enforcement-message-view-model)
+youtube.com##ytd-enforcement-message-view-model
+youtube.com##ytd-popup-container:has(ytd-enforcement-message-view-model)
+m.youtube.com##ytm-promoted-sparkles-web-renderer
+m.youtube.com##ytm-companion-ad-renderer
+m.youtube.com##ytm-promoted-video-renderer
+m.youtube.com##ad-slot-renderer
+m.youtube.com##ytm-rich-item-renderer:has(> ad-slot-renderer)
+music.youtube.com##ytmusic-mealbar-promo-renderer
+music.youtube.com##ytmusic-statement-banner-renderer
+||youtube.com/pagead/$important
+||youtube.com/api/stats/ads$important
+||youtube.com/ptracking$important
+||youtube.com/get_midroll_info$important
+||youtube.com/youtubei/v1/log_event$xhr,important
+||googleads.g.doubleclick.net^$important
+||static.doubleclick.net/instream/ad_status.js$important
+@@||youtube.com/youtubei/v1/player$xhr
+
+! ───────────────────────────── Twitch ─────────────────────────────
+twitch.tv##div[data-test-selector="sad-overlay"]
+twitch.tv##[data-a-target="video-ad-countdown"]
+twitch.tv##.stream-display-ad__wrapper
+twitch.tv##div[data-test-selector="ad-banner-default-text"]
+twitch.tv##.top-bar--pointer-enabled:has([data-a-target="outstream-ax-overlay"])
+twitch.tv##[data-a-target="outstream-ax-overlay"]
+twitch.tv##div[aria-label="Sponsored highlight"]
+twitch.tv##.player-ad-notice
+||spade.twitch.tv^$xhr,domain=twitch.tv
+||countess.twitch.tv^$domain=twitch.tv
+||amazon-adsystem.com^$domain=twitch.tv
+
+! ───────────────────────── Social sponsored posts ─────────────────────────
+x.com,twitter.com##div[data-testid="cellInnerDiv"]:has(div[data-testid="placementTracking"])
+x.com,twitter.com##div[data-testid="cellInnerDiv"]:has(article span:has-text(/^(Ad|Promoted|Anzeige|Publicité|Promocionado|Sponsorisé)$/))
+x.com,twitter.com##div[data-testid="sidebarColumn"] div[aria-label="Trending"] div:has(> div > div > a[href*="/i/premium"])
+x.com,twitter.com##aside[aria-label="Subscribe to Premium"]
+x.com,twitter.com##div[data-testid="sidebarColumn"] section:has(a[href="/i/verified-choose"])
+reddit.com##shreddit-ad-post
+reddit.com##shreddit-comments-page-ad
+reddit.com##shreddit-comment-tree-ad
+reddit.com##shreddit-sidebar-ad
+reddit.com##[data-testid="ad-post"]
+reddit.com##.promotedlink
+reddit.com##faceplate-tracker[source="ad"]
+reddit.com##div[data-before-content="advertisement"]
+reddit.com##aside:has(shreddit-ad-post)
+facebook.com##div[role="feed"] > div:has(a[href*="/ads/about/"])
+facebook.com##div[role="feed"] > div:has(a[aria-label="Sponsored"])
+facebook.com##div[role="feed"] > div:has(span:has-text(/^Sponsored$/))
+facebook.com##div[role="complementary"] div:has(> div > span:has-text(/^Sponsored$/))
+facebook.com##div[data-pagelet^="RightRail"] > div:has(a[href*="/ads/"])
+instagram.com##article:has(span:has-text(/^(Sponsored|Gesponsert|Sponsorisé|Patrocinado|Sponsorizzato)$/))
+instagram.com##div[role="presentation"] > div:has(a[href*="/ads/"])
+linkedin.com##.feed-shared-update-v2:has(.update-components-actor__sub-description:has-text(/Promoted|Sponsored/))
+linkedin.com##div.feed-shared-update-v2:has(span:has-text(/^Promoted$/))
+linkedin.com##.ad-banner-container
+linkedin.com##section.ad-banner-container
+quora.com##.dom_annotate_ad_promoted_answer
+quora.com##div.q-box:has(> div > div > .q-text:has-text(/^Sponsored$/))
+pinterest.com##div[data-test-id="pin"]:has(div[data-test-id="sponsored-pin-indicator"])
+pinterest.com##div[data-grid-item="true"]:has(div:has-text(/^Promoted by$/))
+tiktok.com##div[class*="DivAdBanner"]
+
+! ───────────────────────────── Search engines ─────────────────────────────
+google.*###tads
+google.*###tadsb
+google.*###bottomads
+google.*##[data-text-ad]
+google.*##div[aria-label="Ads"]
+google.*##.commercial-unit-desktop-top
+google.*##.commercial-unit-desktop-rhs
+google.*##.cu-container
+google.*##.ads-ad
+bing.com##li.b_ad
+bing.com##.b_adSlug
+bing.com##.ad_sc
+duckduckgo.com##.result--ad
+duckduckgo.com##[data-testid="ad"]
+yahoo.com##.searchCenterTopAds
+yahoo.com##.searchCenterBottomAds
+yahoo.com##div[id^="sda-"]
+
+! ─────────────────────── Shopping & news sponsored ───────────────────────
+amazon.*##.AdHolder
+amazon.*##.s-result-item:has(.puis-sponsored-label-text)
+amazon.*##div[data-component-type="sp-sponsored-result"]
+amazon.*##.sbx-desktop
+amazon.*##div[cel_widget_id*="adplacements"]
+amazon.*##div[data-cel-widget^="multi-brand-creative"]
+amazon.*##[data-ad-feedback]
+amazon.*##.s-widget-container:has(.puis-sponsored-label-text)
+flipkart.com##div[class*="_2d4LTz"]:has-text(/^Ad$/)
+msn.com##div[class^="native-ad"]
+##.outbrain-widget
+##.OUTBRAIN
+##.trc_rbox_container
+##.taboola-container
+##div[id^="taboola-"]
+##div[id^="div-gpt-ad"]
+##.adsbygoogle:not(.hush-allowed)
+##ins.adsbygoogle
+##iframe[id^="google_ads_iframe"]
+##div[data-google-query-id]
+##amp-ad
+##amp-embed[type="taboola"]
+##amp-sticky-ad
+##.mgbox
+##div[id^="ezoic-pub-ad"]
+##span[id^="ezoic-pub-ad"]
+##.ezoic-ad
+##div[id^="crt-"][style]:empty
+##a[href^="https://www.googleadservices.com/pagead/aclk?"]
+##a[href*=".g.doubleclick.net/"][target="_blank"]
+##div[id^="adngin-"]
+##div[aria-label="Advertisement"]
+##div.ad-slot:empty
+##[data-ad-slot]
+##[data-adunit]
+
+! ───────────────────────── Popunder / popup networks ─────────────────────────
+||popads.net^$popup,3p
+||popcash.net^$popup,3p
+||onclickads.net^$popup,3p
+||onclkds.com^$popup,3p
+||propellerads.com^$popup,3p
+||propellerclick.com^$popup,3p
+||adsterra.com^$popup,3p
+||adsterratools.com^$popup,3p
+||clickadu.com^$popup,3p
+||hilltopads.net^$popup,3p
+||admaven.com^$popup,3p
+||ad-maven.com^$popup,3p
+||adcash.com^$popup,3p
+||popmyads.com^$popup,3p
+||monetag.com^$popup,3p
+||trafficstars.com^$popup,3p
+||exoclick.com^$popup,3p
+||exosrv.com^$popup,3p
+||juicyads.com^$popup,3p
+||galaksion.com^$popup,3p
+||clickaine.com^$popup,3p
+||richads.com^$popup,3p
+||pemsrv.com^$popup,3p
+||realsrv.com^$popup,3p
+||tsyndicate.com^$popup,3p
+||rtmark.net^$popup,3p
+||bidvertiser.com^$popup,3p
+||a-ads.com^$popup,3p
+||zeroredirect1.com^$popup,3p
+||adskeeper.co.uk^$popup,3p
+||mgid.com^$popup,3p
+||revcontent.com^$popup,3p
+||trafficjunky.net^$popup,3p
+||trafficfactory.biz^$popup,3p
+||clickadilla.com^$popup,3p
+||plugrush.com^$popup,3p
+||adxpansion.com^$popup,3p
+||onclicka.com^$popup,3p
+||pushame.com^$popup,3p
+||pushwhy.com^$popup,3p
+||popunder.net^$popup,3p
+||popunder.ru^$popup,3p
+||poprtb.com^$popup,3p
+||1xbet.com^$popup,3p
+||stake.com^$popup,3p
+||popads.net^$3p
+||popcash.net^$3p
+||onclickads.net^$3p
+||propellerclick.com^$3p
+||hilltopads.net^$3p
+||clickadu.com^$3p
+||popmyads.com^$3p
+||poprtb.com^$3p
+||onclicka.com^$3p
+||pushame.com^$3p
+
+! ───────────────────────── Anti-adblock bait helpers ─────────────────────────
+||fundingchoicesmessages.google.com^$3p
+||blockadblock.com^$3p
+||detectadblock.com^$3p
+||btloader.com^$3p
+||adblockanalytics.com^$3p
+##+js(set-constant, canRunAds, true)
+##+js(set-constant, isAdBlockActive, false)
+##+js(set-constant, adblockDetector, noopFunc)
+
+! ─────────────────── Ad & telemetry hostnames (whole-domain, third-party only) ───────────────────
+! Pure ad / analytics endpoints that browser lists only block by path. `$3p` keeps the owners'
+! own websites and dashboards working when visited directly.
+||pagead2.googlesyndication.com^$3p
+||afs.googlesyndication.com^$3p
+||adservice.google.com^$3p
+||pagead2.googleadservices.com^$3p
+||stats.g.doubleclick.net^$3p
+||ad.doubleclick.net^$3p
+||m.doubleclick.net^$3p
+||mediavisor.doubleclick.net^$3p
+||click.googleanalytics.com^$3p
+||ssl.google-analytics.com^$3p
+||adtago.s3.amazonaws.com^$3p
+||analyticsengine.s3.amazonaws.com^$3p
+||analytics.s3.amazonaws.com^$3p
+||advice-ads.s3.amazonaws.com^$3p
+||pixel.facebook.com^$3p
+||an.facebook.com^$3p
+||static.ads-twitter.com^$3p
+||ads-api.twitter.com^$3p
+||ads.linkedin.com^$3p
+||analytics.pointdrive.linkedin.com^$3p
+||ads.pinterest.com^$3p
+||log.pinterest.com^$3p
+||trk.pinterest.com^$3p
+||events.reddit.com^$3p
+||events.redditmedia.com^$3p
+||ads.youtube.com^$3p
+||ads.tiktok.com^$3p
+||ads-api.tiktok.com^$3p
+||ads-sg.tiktok.com^$3p
+||analytics.tiktok.com^$3p
+||analytics-sg.tiktok.com^$3p
+||business-api.tiktok.com^$3p
+||log.byteoversea.com^$3p
+||ads.yahoo.com^$3p
+||analytics.yahoo.com^$3p
+||analytics.query.yahoo.com^$3p
+||geo.yahoo.com^$3p
+||udcm.yahoo.com^$3p
+||partnerads.ysm.yahoo.com^$3p
+||log.fc.yahoo.com^$3p
+||gemini.yahoo.com^$3p
+||adtech.yahooinc.com^$3p
+||extmaps-api.yandex.net^$3p
+||appmetrica.yandex.ru^$3p
+||adfstat.yandex.ru^$3p
+||metrika.yandex.ru^$3p
+||offerwall.yandex.net^$3p
+||adfox.yandex.ru^$3p
+||auction.unityads.unity3d.com^$3p
+||webview.unityads.unity3d.com^$3p
+||config.unityads.unity3d.com^$3p
+||adserver.unityads.unity3d.com^$3p
+||iot-eu-logser.realme.com^$3p
+||iot-logser.realme.com^$3p
+||bdapi-ads.realmemobile.com^$3p
+||bdapi-in-ads.realmemobile.com^$3p
+||api.ad.xiaomi.com^$3p
+||data.mistat.xiaomi.com^$3p
+||data.mistat.india.xiaomi.com^$3p
+||data.mistat.rus.xiaomi.com^$3p
+||sdkconfig.ad.xiaomi.com^$3p
+||sdkconfig.ad.intl.xiaomi.com^$3p
+||tracking.rus.miui.com^$3p
+||adsfs.oppomobile.com^$3p
+||adx.ads.oppomobile.com^$3p
+||ck.ads.oppomobile.com^$3p
+||data.ads.oppomobile.com^$3p
+||click.oneplus.cn^$3p
+||open.oneplus.net^$3p
+||metrics.data.hicloud.com^$3p
+||metrics2.data.hicloud.com^$3p
+||grs.hicloud.com^$3p
+||logservice.hicloud.com^$3p
+||logservice1.hicloud.com^$3p
+||logbak.hicloud.com^$3p
+||samsungads.com^$3p
+||smetrics.samsung.com^$3p
+||nmetrics.samsung.com^$3p
+||samsung-com.112.2o7.net^$3p
+||analytics-api.samsunghealthcn.com^$3p
+||iadsdk.apple.com^$3p
+||metrics.icloud.com^$3p
+||metrics.mzstatic.com^$3p
+||api-adservices.apple.com^$3p
+||books-analytics-events.apple.com^$3p
+||weather-analytics-events.apple.com^$3p
+||notes-analytics-events.apple.com^$3p
+||notify.bugsnag.com^$3p
+||sessions.bugsnag.com^$3p
+||api.bugsnag.com^$3p
+||app.bugsnag.com^$3p
+
+! ---------------------------------------------------------------------------------------------
+! Site fixes: upstream filters that break a site's own player
+! ---------------------------------------------------------------------------------------------
+! scat.gold reveals its lazy video iframe from a setTimeout that calls `.show()`
+scat.gold#@#+js(nostif, show)
+! EasyList blocks all of imasdk.googleapis.com; players then wait forever for the SDK. Serve a
+! stand-in whose ad requests fail instantly, so the video starts with no ads.
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js
+||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$script,redirect=google-ima.js
+
+! uBO answers *every* XHR to these ad hosts with an empty success (so adblock detectors stay
+! quiet). That also hides real blocking from the page. Keep the decoy only for the ad-script
+! paths detectors probe; everything else on these hosts is blocked outright.
+||pagead2.googlesyndication.com^$xhr,redirect=noop.js,badfilter
+||doubleclick.net^$xhr,redirect=noop.txt,badfilter
+||pagead2.googlesyndication.com/pagead/js/$xhr,redirect=noop.js
+||doubleclick.net/instream/$xhr,redirect=noop.js
+||g.doubleclick.net/pagead/$xhr,redirect=noop.txt
+||g.doubleclick.net/gampad/$xhr,redirect=noop.txt
+
+! adblock.turtlecute.org: its ad-script and dynamic-ad baits (RU AdList carries the same fixes)
+||adblock.turtlecute.org/js/widget/ads.js$script,1p
+||adblock.turtlecute.org/js/pagead.js$script,1p
+adblock.turtlecute.org###ad_ctd

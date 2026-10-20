@@ -1,0 +1,66 @@
+{
+  "name": "hush",
+  "displayName": "HUSH",
+  "version": "1.0.0",
+  "description": "HUSH: a fast, beautiful, aggressive ad, popup and tracker blocker for Chrome, Brave and Edge.",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/mohitbansal25082006/HUSH#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohitbansal25082006/HUSH.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mohitbansal25082006/HUSH/issues"
+  },
+  "keywords": [
+    "adblock",
+    "ad-blocker",
+    "chrome-extension",
+    "manifest-v3",
+    "declarativenetrequest",
+    "popup-blocker",
+    "privacy",
+    "brave"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "filters": "tsx compiler/build-filters.ts",
+    "filters:offline": "tsx compiler/build-filters.ts --offline",
+    "icons": "tsx scripts/make-icons.ts",
+    "dev": "wxt",
+    "build": "wxt build",
+    "build:all": "npm run filters && npm run icons && wxt build",
+    "zip": "wxt zip",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "hotfix:keys": "tsx scripts/hotfix.ts keys",
+    "hotfix:sign": "tsx scripts/hotfix.ts sign",
+    "postinstall": "wxt prepare",
+    "hotfix:serve": "tsx scripts/serve-hotfix.ts",
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "store:assets": "tsx scripts/store-assets.ts",
+    "release": "npm run filters && npm run icons && wxt build && wxt zip",
+    "readme:assets": "tsx scripts/readme-assets.ts"
+  },
+  "dependencies": {
+    "gsap": "3.15.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/chrome": "0.3.5",
+    "@types/node": "^22.10.0",
+    "@wxt-dev/module-svelte": "2.0.5",
+    "sharp": "0.35.5",
+    "svelte": "5.57.2",
+    "svelte-check": "4.7.7",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5",
+    "wxt": "0.21.4"
+  }
+}

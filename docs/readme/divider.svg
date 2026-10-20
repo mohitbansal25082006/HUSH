@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 40" width="1200" height="40" role="img" aria-label="">
+<title></title>
+<style>.flow{stroke-dasharray:14 10;animation:flow 2.4s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-48}}
+.slow{animation:drift 6s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(-40px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff7a9c" stop-opacity="0"/><stop offset=".25" stop-color="#ff7a9c"/><stop offset=".6" stop-color="#8b6cff"/><stop offset=".85" stop-color="#7ef0c8"/><stop offset="1" stop-color="#7ef0c8" stop-opacity="0"/></linearGradient></defs>
+<path class="slow" d="M0 20 Q30 13 60 20 Q90 27 120 20 Q150 13 180 20 Q210 27 240 20 Q270 13 300 20 Q330 27 360 20 Q390 13 420 20 Q450 27 480 20 Q510 13 540 20 Q570 27 600 20 Q630 13 660 20 Q690 27 720 20 Q750 13 780 20 Q810 27 840 20 Q870 13 900 20 Q930 27 960 20 Q990 13 1020 20 Q1050 27 1080 20 Q1110 13 1140 20 Q1170 27 1200 20 Q1230 13 1260 20 Q1290 27 1320 20" fill="none" stroke="url(#g)" stroke-opacity=".35" stroke-width="2"/>
+<path class="flow" d="M0 20 Q40 10 80 20 Q120 30 160 20 Q200 10 240 20 Q280 30 320 20 Q360 10 400 20 Q440 30 480 20 Q520 10 560 20 Q600 30 640 20 Q680 10 720 20 Q760 30 800 20 Q840 10 880 20 Q920 30 960 20 Q1000 10 1040 20 Q1080 30 1120 20 Q1160 10 1200 20 Q1240 30 1280 20" fill="none" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
+</svg>

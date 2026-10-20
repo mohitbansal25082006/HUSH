@@ -1,0 +1,176 @@
+/* Shared building blocks for dashboard pages. */
+.page-head {
+  margin-bottom: 28px;
+}
+.page-head h2 {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.page-head p {
+  margin: 0;
+  color: var(--text-2);
+  max-width: 62ch;
+  font-size: 15px;
+}
+h3.section {
+  margin: 36px 0 10px;
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.rows {
+  border-top: 1px solid var(--line);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.row .text {
+  flex: 1;
+  min-width: 0;
+}
+.row .name {
+  font-weight: 650;
+  font-size: 14.5px;
+}
+.row .desc {
+  color: var(--text-2);
+  font-size: 13px;
+  margin-top: 1px;
+  max-width: 64ch;
+}
+.row .meta {
+  color: var(--text-3);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 650;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.25s var(--spring);
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--surface-2);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn.primary {
+  background: var(--lilac-deep);
+  border-color: transparent;
+  color: #fff;
+}
+.btn.primary:hover {
+  filter: brightness(1.08);
+}
+.btn.danger {
+  color: var(--coral);
+}
+.btn.small {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  border-radius: 10px;
+}
+.input {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--ink-2);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input:focus {
+  border-color: var(--lilac);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lilac) 22%, transparent);
+}
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+}
+.seg button {
+  height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--text-2);
+  font-weight: 650;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.2s;
+}
+.seg button.on {
+  background: var(--surface-2);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+.chip.ad {
+  background: color-mix(in srgb, var(--coral) 18%, transparent);
+  color: var(--coral);
+}
+.chip.tracker {
+  background: color-mix(in srgb, var(--amber) 18%, transparent);
+  color: var(--amber);
+}
+.chip.popup,
+.chip.malware {
+  background: color-mix(in srgb, var(--lilac) 18%, transparent);
+  color: var(--lilac);
+}
+.chip.redirect,
+.chip.video {
+  background: color-mix(in srgb, var(--mint) 16%, transparent);
+  color: var(--mint);
+}
+.empty {
+  padding: 40px 0;
+  color: var(--text-2);
+  text-align: center;
+}
+.mono {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 12.5px;
+}

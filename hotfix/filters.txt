@@ -1,0 +1,2 @@
+! HUSH hotfix filters — signed with `npm run hotfix:sign` and served from HOTFIX_URL.
+! Use this for fast fixes (new YouTube/Twitch changes, site breakage) without a store update.

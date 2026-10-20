@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>HUSH test page</title>
+  </head>
+  <body>
+    <h1 id="content">Real content</h1>
+    <p class="article">This paragraph must stay visible.</p>
+
+    <!-- generic ad containers known to EasyList / HUSH filters -->
+    <ins class="adsbygoogle" id="ad-ins" style="display:block;width:300px;height:250px"></ins>
+    <div id="div-gpt-ad-1234567-0" style="width:300px;height:250px">gpt slot</div>
+    <div class="AdvertContainer" id="generic-ad" style="width:300px;height:90px">banner</div>
+    <div class="my-custom-thing" id="custom">custom user filter target</div>
+    <div class="hotfix-target" id="hotfix">hotfix target</div>
+    <div class="feed">
+      <div class="post" id="sponsored-post"><span>Sponsored</span> buy stuff</div>
+      <div class="post" id="normal-post"><span>Hello</span> friends</div>
+    </div>
+
+    <div id="click-target" style="width:400px;height:200px;background:#eee">plain area (not a link)</div>
+    <a id="same-link" href="/other.html" target="_blank">same-site link</a>
+
+    <script>
+      window.results = {};
+      async function probe(name, url) {
+        try {
+          await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+          window.results[name] = 'loaded';
+        } catch (e) {
+          window.results[name] = 'blocked';
+        }
+      }
+      window.runProbes = () => Promise.all([
+        probe('pubmatic', 'https://ads.pubmatic.com/AdServer/js/pwt/1/2/pwt.js'),
+        probe('analytics', 'https://www.google-analytics.com/g/collect?v=2'),
+        probe('facebook', 'https://connect.facebook.net/en_US/fbevents.js'),
+        probe('hotjar', 'https://static.hotjar.com/c/hotjar-1.js'),
+        probe('example', 'https://example.com/'),
+      ]);
+      // Page-wide click hijacker, as used by popunder scripts.
+      document.addEventListener('click', (e) => {
+        if (e.target.id === 'click-target') window.results.hijack = String(window.open('https://ad.popads.example/landing'));
+      });
+      // Popup without any user gesture.
+      setTimeout(() => { window.results.noGesture = String(window.open('https://popads.net/x')); }, 300);
+    </script>
+  </body>
+</html>
