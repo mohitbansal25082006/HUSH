@@ -9,6 +9,10 @@
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-c9b8ff?style=for-the-badge&labelColor=1b1530" alt="License: GPL-3.0-or-later"></a>
 <a href="https://adblock.turtlecute.org/"><img src="https://img.shields.io/badge/ad%20block%20test-132%2F132-7ef0c8?style=for-the-badge&labelColor=1b1530" alt="132 of 132 on adblock.turtlecute.org"></a>
 <br>
+<a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk"><img src="https://img.shields.io/chrome-web-store/v/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&logo=googlechrome&logoColor=fff1d0&label=Chrome%20Web%20Store&labelColor=1b1530&color=fff1d0" alt="HUSH on the Chrome Web Store"></a>
+<a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk"><img src="https://img.shields.io/chrome-web-store/users/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&label=users&labelColor=1b1530&color=c9b8ff" alt="Chrome Web Store users"></a>
+<a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk/reviews"><img src="https://img.shields.io/chrome-web-store/rating/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&label=rating&labelColor=1b1530&color=7ef0c8" alt="Chrome Web Store rating"></a>
+<br>
 <img src="https://img.shields.io/badge/Chrome-supported-c9b8ff?style=for-the-badge&logo=googlechrome&logoColor=fff1d0&labelColor=1b1530" alt="Chrome">
 <img src="https://img.shields.io/badge/Brave-supported-c9b8ff?style=for-the-badge&logo=brave&logoColor=fff1d0&labelColor=1b1530" alt="Brave">
 <img src="https://img.shields.io/badge/Edge-supported-c9b8ff?style=for-the-badge&logo=microsoftedge&logoColor=fff1d0&labelColor=1b1530" alt="Edge">
@@ -88,8 +92,10 @@ HUSH blocks ads, popups, trackers, cookie banners and anti-adblock walls before 
 
 ## Install
 
-<a href="https://github.com/mohitbansal25082006/HUSH/releases/latest"><img src="https://img.shields.io/badge/Chrome%20Web%20Store-coming%20soon-fff1d0?style=for-the-badge&logo=googlechrome&logoColor=fff1d0&labelColor=1b1530" alt="Chrome Web Store: coming soon"></a>
+<a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk"><img src="https://img.shields.io/chrome-web-store/v/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&logo=googlechrome&logoColor=fff1d0&label=Chrome%20Web%20Store&labelColor=1b1530&color=fff1d0" alt="Get HUSH on the Chrome Web Store"></a>
 <a href="https://github.com/mohitbansal25082006/HUSH/releases/latest"><img src="https://img.shields.io/badge/download-latest%20release-c9b8ff?style=for-the-badge&logo=github&logoColor=fff1d0&labelColor=1b1530" alt="Download the latest release"></a>
+
+**From the Chrome Web Store (recommended):** open the [HUSH store page](https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk) and click **Add to Chrome**. It works in Brave and Edge too.
 
 **From a release:**
 
