@@ -59,14 +59,12 @@ test('YouTube: player response carries no ads and no ad plays', async ({ context
   expect(await page.$('ytd-enforcement-message-view-model')).toBeNull();
 });
 
-test('Twitch: the player worker is wrapped by the HUSH shield', async ({ context, sw }) => {
+test('Twitch: HUSH registers the bundled ad curtain', async ({ context, sw }) => {
   void sw;
   const page = await context.newPage();
   await page.goto('https://www.twitch.tv/', { waitUntil: 'domcontentloaded' });
-  const name = await page.evaluate(() => (window.Worker as unknown as { name: string }).name);
-  console.log('Worker constructor:', name);
-  // The native constructor is named "Worker"; HUSH's wrapper (minified) has another name.
-  expect(name).not.toBe('Worker');
+  const scripts = await sw.evaluate(() => chrome.scripting.getRegisteredContentScripts({ ids: ['hush-twitch'] }));
+  expect(scripts).toMatchObject([{ world: 'ISOLATED', js: ['content-scripts/twitch.js'] }]);
 });
 
 test('a real news site: ad slots are hidden', async ({ context, sw }) => {

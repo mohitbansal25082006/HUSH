@@ -1,7 +1,7 @@
 {
   "name": "hush",
   "displayName": "HUSH",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HUSH: a fast, beautiful, aggressive ad, popup and tracker blocker for Chrome, Brave and Edge.",
   "private": true,
   "type": "module",
@@ -44,7 +44,7 @@
     "hotfix:serve": "tsx scripts/serve-hotfix.ts",
     "test:live": "playwright test --config playwright.live.config.ts",
     "store:assets": "tsx scripts/store-assets.ts",
-    "release": "npm run filters && npm run icons && wxt build && wxt zip",
+    "release": "npm run filters && npm run icons && npm run zip",
     "readme:assets": "tsx scripts/readme-assets.ts"
   },
   "dependencies": {

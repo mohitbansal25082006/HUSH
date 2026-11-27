@@ -39,7 +39,7 @@
   </button>
   <div>
     <h2>HUSH {version}</h2>
-    <p>A quiet web. HUSH blocks ads, popups, trackers and the tricks that bring them back, without collecting anything about you. Nothing you browse ever leaves your browser.</p>
+    <p>HUSH blocks ads, popups and trackers. HUSH uses page content and request URLs to apply filters and show blocking activity on your device.</p>
     <p class="small">Free software under the GNU General Public License v3.0 or later.</p>
     {#if repo}
       <nav class="links">

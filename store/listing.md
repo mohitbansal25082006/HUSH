@@ -1,20 +1,20 @@
-# Chrome Web Store listing — HUSH 1.0.0
+# Chrome Web Store listing — HUSH 1.0.1
 
 Copy each field into the Chrome Web Store Developer Dashboard.
 
 ## Package
 
-- **File:** `.output/hush-1.0.0-chrome.zip`. Create it with `npm run release`.
-- **Version:** 1.0.0
+- **File** `.output/hush-1.0.1-chrome.zip`. Create it with `npm run release`.
+- **Version** 1.0.1
 
 ## Store listing
 
 **Name:** HUSH — Ad & Popup Blocker
 
 **Summary** (taken from the manifest, 132 characters at most):
-> Silence the web. Blocks ads, popups, popunders, trackers, YouTube & Twitch ads, cookie banners and anti-adblock walls.
+> Blocks ads, popups, trackers and cookie banners. Helps with YouTube ads, mutes Twitch ads and hides anti-adblock prompts.
 
-**Category:** Productivity → Tools. Some dashboards list ad blockers under "Privacy & Security" instead.
+**Category:** Privacy & Security
 
 **Language:** English
 
@@ -27,7 +27,7 @@ WHAT HUSH BLOCKS
 • Ads and trackers, using Chrome's own fast blocking engine with rules from EasyList, EasyPrivacy, uBlock Origin filters, AdGuard and regional lists
 • Empty ad boxes and sponsored posts left behind on pages
 • Popups, popunders, hijacked clicks and invisible click traps
-• Video ads on YouTube and Twitch
+• YouTube ad blocking and skipping, plus mute and cover for detected Twitch ads
 • Cookie banners: HUSH says no for you on about 30 consent platforms
 • "Turn off your ad blocker" walls
 • Tracking codes in links (utm, fbclid, gclid and more)
@@ -43,7 +43,7 @@ MADE TO BE EASY
 • Light and dark themes, and Hushy the moon-ghost keeping you company
 
 PRIVATE BY DESIGN
-HUSH collects nothing. Your statistics stay in your browser. HUSH has no accounts, analytics or ads, and makes no network requests of its own.
+HUSH processes page content to find ads and consent prompts. It uses page and request URLs and request outcomes to filter traffic, count blocks and display the request log. This data stays in your browser. HUSH has no accounts, analytics or ads. Signed filter updates are available if you set an update address.
 
 OPEN SOURCE
 HUSH is free software under the GPL-3.0 license: https://github.com/mohitbansal25082006/HUSH
@@ -73,20 +73,31 @@ HUSH is free software under the GPL-3.0 license: https://github.com/mohitbansal2
 | unlimitedStorage | Stores the compiled cosmetic filter database (several MB) locally. |
 | tabs | Closes popup and popunder tabs, and shows statistics for the current tab in the popup. |
 | webNavigation | Detects tabs opened by popunders, and reapplies site fixes on in-page navigation. |
-| webRequest | Counts requests that were blocked, for the badge and the dashboard. Observation only: requests are never read, changed or sent anywhere. |
-| alarms | Schedules the optional hotfix check (off by default). |
+| webRequest | Observes request URLs and outcomes to count blocked requests and show the on-device request log. |
+| alarms | Schedules signed filter checks when the user has configured an update address. |
 | contextMenus | Adds "Block element" and "Pause HUSH on this site" to the right-click menu. |
 | Host permission `<all_urls>` | Ads and trackers appear on every site, so HUSH must be able to filter and clean any page the user visits. |
 
 **Remote code:**
-> No, I am not using remote code. All JavaScript is included in the package. The optional hotfix feature downloads filter text only (signed data, never code). It is off unless the user enters an address.
+> No, I am not using remote code. The extension package includes all JavaScript. The optional update channel accepts signed network filters and element-hiding selectors. The update address is empty by default.
 
-**Data usage:** tick **none** of the data categories, then tick all three certifications:
+**Data usage**
+
+Disclose **Web history** for page and request URLs and **Website content** for on-device cosmetic filtering. The public description and privacy policy explain how HUSH uses this data locally. [Chrome Web Store guidance on local processing](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq#3-does-an-extension-need-to-disclose-user-data-handling-if-the-data-is-only-processed-or-stored-locally-on-a-users-device)
+
+Confirm the three data usage certifications in the dashboard.
+
 - I do not sell or transfer user data to third parties, outside of the approved use cases.
 - I do not use or transfer user data for purposes unrelated to my item's single purpose.
 - I do not use or transfer user data to determine creditworthiness or for lending purposes.
 
 **Privacy policy URL:** https://github.com/mohitbansal25082006/HUSH/blob/main/PRIVACY.md
+
+Publish the updated [privacy policy](../PRIVACY.md) at that URL before submitting the listing.
+
+## Reviewer notes for the Blue Argon resubmission
+
+Version 1.0.1 removes `scriptlets/hush-ads/replaceNodeText.js` and the scriptlet mechanism that generated the Viafoura and Spot.IM loaders. Twitch ad detection, muting and covering now use bundled code and the player UI. Signed hotfixes accept network filters and ordinary element-hiding selectors. The release build checks the package contents for common remote code loaders before creating the ZIP.
 
 ## Distribution
 

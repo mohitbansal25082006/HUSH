@@ -37,6 +37,7 @@ npm run check && npm test && npm run build && npm run test:e2e
 
 - Match the style of the surrounding code, and keep comments about *why*, not *what*.
 - Scriptlets in `src/scriptlets/library.js` must be self-contained: they are serialized and injected into pages, so they cannot use imports or outer variables.
+- Keep scriptlet arguments as data. Page fixes may use packaged code and resources. Signed hotfixes support network rules and ordinary element-hiding selectors.
 - UI changes should keep the "Dusk" design: the tokens in `src/ui/theme.css`, the Bricolage Grotesque and Figtree fonts, and Hushy.
 - Add a unit test for any parser change in `tests/unit/parser.test.ts`.
 - Never commit `keys/`.
@@ -45,6 +46,6 @@ npm run check && npm test && npm run build && npm run test:e2e
 
 - One topic per pull request.
 - Describe what changed and how you tested it.
-- CI must pass: type check, unit tests, build and end-to-end tests.
+- CI runs the type check, unit tests, build, end-to-end tests and the production ZIP check. Use `npm run release` to build a store submission.
 
 By contributing, you agree to license your work under GPL-3.0-or-later.

@@ -6,7 +6,7 @@
   import { app, refreshStats } from './store.svelte';
   import { formatBytes } from '../../shared/storage';
 
-  let hushy: Hushy;
+  let hushy = $state<Hushy>();
   let last = 0;
 
   onMount(() => {
@@ -26,7 +26,7 @@
   const domains = $derived(top(s?.domains));
   const sites = $derived(top(s?.sites));
   // A blocked request saves roughly 40 ms of network + script time on average.
-  const minutesSaved = $derived(s ? Math.round(((s.ads + s.trackers) * 0.04 + s.popups * 4 + s.videoAds * 15) / 60) : 0);
+  const minutesSaved = $derived(s ? Math.round(((s.ads + s.trackers) * 0.04 + s.popups * 4) / 60) : 0);
 </script>
 
 {#if s}
@@ -45,7 +45,7 @@
     <div><dt>Ads</dt><dd><Counter value={s.ads + s.cosmetic} format="compact" /></dd></div>
     <div><dt>Trackers</dt><dd><Counter value={s.trackers} format="compact" /></dd></div>
     <div><dt>Popups closed</dt><dd><Counter value={s.popups} format="compact" /></dd></div>
-    <div><dt>Video ads skipped</dt><dd><Counter value={s.videoAds} format="compact" /></dd></div>
+    <div><dt>Video ads handled</dt><dd><Counter value={s.videoAds} format="compact" /></dd></div>
   </dl>
 
   <h3 class="section">The last 30 days</h3>

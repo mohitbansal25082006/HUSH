@@ -95,7 +95,7 @@
         <div class="opts">
           <label class="opt"><span><b>Reject cookie banners</b>Click “reject” for you, and hide the rest.</span><Toggle label="Reject cookie banners" bind:checked={settings.cookieAutoReject} /></label>
           <label class="opt"><span><b>Silence notification prompts</b>No more “Allow notifications?” on every news site.</span><Toggle label="Silence notification prompts" bind:checked={settings.blockNotificationPrompts} /></label>
-          <label class="opt"><span><b>Skip YouTube & Twitch ads</b>Including the ones stitched into the video itself.</span><Toggle label="Skip YouTube and Twitch ads" checked={settings.youtube && settings.twitch} onchange={(v) => { settings.youtube = v; settings.twitch = v; }} /></label>
+          <label class="opt"><span><b>YouTube &amp; Twitch ad protection</b>Skip YouTube ads and mute detected Twitch ads.</span><Toggle label="YouTube and Twitch ad protection" checked={settings.youtube && settings.twitch} onchange={(v) => { settings.youtube = v; settings.twitch = v; }} /></label>
           <label class="opt"><span><b>Strip tracking from links</b>Removes utm_, fbclid and friends from addresses.</span><Toggle label="Strip tracking from links" bind:checked={settings.stripTracking} /></label>
         </div>
         <p class="lede small">Regional lists for sites in your language:</p>

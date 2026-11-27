@@ -39,16 +39,6 @@ const OFFLINE = process.argv.includes('--offline');
 const MAX_REGEX_PER_RULESET = 900;
 const MAX_RULES_PER_RULESET = 150_000;
 
-/**
- * Upstream scriptlet calls HUSH deliberately does not run, each with the reason.
- * uBO's YouTube "serverContract" fix retags the player's client and reloads stalled videos; it
- * only works together with `trusted-edit-inbound-object` filters (not supported here). Alone it
- * reload-loops the player and proxies Array.prototype.push, so videos keep loading.
- */
-const SCRIPTLET_DENYLIST: Array<{ fn: string; test: (args: string[]) => boolean }> = [
-  { fn: 'replaceNodeText', test: (args) => args.some((a) => a.includes('serverContract')) },
-];
-
 const SCRIPTLET_ALIASES = (library as unknown as { SCRIPTLET_ALIASES: Record<string, string> }).SCRIPTLET_ALIASES;
 const LIB = library as unknown as Record<string, (...a: string[]) => void>;
 
@@ -332,14 +322,13 @@ async function main() {
                 break;
               }
               const fn = SCRIPTLET_ALIASES[f.body];
-              if (!fn || !LIB[fn]) {
+              if (!Object.hasOwn(SCRIPTLET_ALIASES, f.body) || typeof LIB[fn] !== 'function') {
                 unknownScriptlets.set(f.body, (unknownScriptlets.get(f.body) ?? 0) + 1);
                 break;
               }
               // Trim trailing empty args so identical calls dedupe.
               const args = [...(f.args ?? [])];
               while (args.length && args[args.length - 1] === '') args.pop();
-              if (SCRIPTLET_DENYLIST.some((d) => d.fn === fn && d.test(args))) break;
               scriptletCalls.push({ rid: rs.id, fn, args, domains: f.domains, notDomains: f.notDomains });
             } else {
               build.cosmetic.push(f);

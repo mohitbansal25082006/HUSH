@@ -32,8 +32,10 @@ export async function checkHotfix(url: string): Promise<{ updated: boolean; stat
     return { updated: false, state };
   }
   try {
-    const sep = url.includes('?') ? '&' : '?';
-    const res = await fetch(`${url}${sep}t=${Math.floor(Date.now() / 600_000)}`, { cache: 'no-store' });
+    const address = new URL(url);
+    if (address.protocol !== 'https:' && address.protocol !== 'http:') throw new Error('invalid hotfix address');
+    address.searchParams.set('t', String(Math.floor(Date.now() / 600_000)));
+    const res = await fetch(address, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const text = await res.text();
     if (text.length > MAX_SIZE) throw new Error('hotfix too large');

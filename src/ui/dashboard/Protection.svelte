@@ -25,7 +25,7 @@
     { key: 'strictPopups', name: 'Catch hijacked clicks', desc: 'Blocks new tabs to other sites when your click was on something unrelated, the classic popunder trick.' },
     { key: 'overlayKiller', name: 'Remove invisible click traps', desc: 'Deletes transparent layers stretched over pages to steal your first click.' },
     { key: 'youtube', name: 'YouTube ad skipper', desc: 'Mutes, fast-forwards and skips any video ad that slips past the filters, and clears the anti-adblock wall.' },
-    { key: 'twitch', name: 'Twitch ad shield', desc: 'Swaps stitched-in stream ads for an ad-free feed, or mutes and covers them when that is not possible.' },
+    { key: 'twitch', name: 'Twitch ad shield', desc: 'Mutes and covers ads when the Twitch player identifies an ad break.' },
     { key: 'cookieAutoReject', name: 'Reject cookie banners', desc: 'Clicks “reject” on common consent banners, so sites record a refusal, not a silent yes.' },
     { key: 'blockNotificationPrompts', name: 'Silence notification prompts', desc: 'Stops sites from asking to send notifications unless you clicked something first.' },
     { key: 'stripTracking', name: 'Strip tracking from links', desc: 'Removes utm_, fbclid, gclid and other tracking parameters when you open a page.' },

@@ -55,15 +55,14 @@ function reconfigure(reason: string): Promise<void> {
 
 async function compileRuntime(): Promise<CompiledRuntime> {
   const [user, hotfix, settings] = await Promise.all([getUserFilters(), getHotfix(), getSettings()]);
-  // Hotfixes are fetched data: compiled untrusted, so they can never smuggle code into pages.
-  const hot = settings.hotfixes && hotfix?.filters ? compileRuntimeFilters(hotfix.filters, false) : null;
-  const mine = compileRuntimeFilters(user, true);
+  const hot = settings.hotfixes && settings.hotfixUrl && hotfix?.filters ? compileRuntimeFilters(hotfix.filters, 'hotfix') : null;
+  const mine = compileRuntimeFilters(user, 'user');
   const merged: CompiledRuntime = {
     network: [...(hot?.network ?? []), ...mine.network],
     cosmetic: { hosts: { ...(hot?.cosmetic.hosts ?? {}) }, generic: [...(hot?.cosmetic.generic ?? []), ...mine.cosmetic.generic] },
-    scriptlets: [...(hot?.scriptlets ?? []), ...mine.scriptlets],
-    popups: [...(hot?.popups ?? []), ...mine.popups],
-    noScriptletHosts: [...(hot?.noScriptletHosts ?? []), ...mine.noScriptletHosts],
+    scriptlets: mine.scriptlets,
+    popups: mine.popups,
+    noScriptletHosts: mine.noScriptletHosts,
     errors: mine.errors,
     counts: mine.counts,
   };

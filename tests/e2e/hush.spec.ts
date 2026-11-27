@@ -64,6 +64,24 @@ test('hides ads cosmetically and keeps content visible', async ({ context, sw })
   await page.screenshot({ path: `${SHOTS}/test-page.png` });
 });
 
+test('mutes and covers detected Twitch ads without replacing the worker', async ({ context, sw }) => {
+  void sw;
+  const page = await context.newPage();
+  await page.route('https://www.twitch.tv/hush-test', (route) => route.fulfill({
+    contentType: 'text/html',
+    body: '<div data-a-target="video-player"><video></video><span data-a-target="video-ad-label">Ad</span></div>',
+  }));
+  await page.goto('https://www.twitch.tv/hush-test');
+  const video = page.locator('video');
+  const curtain = page.getByText('HUSH is silencing a Twitch ad', { exact: false });
+  await expect(video).toHaveJSProperty('muted', true);
+  await expect(curtain).toBeVisible();
+  expect(await page.evaluate(() => String(window.Worker))).toContain('[native code]');
+  await page.locator('[data-a-target="video-ad-label"]').evaluate((label) => label.remove());
+  await expect(video).toHaveJSProperty('muted', false);
+  await expect(curtain).toHaveCount(0);
+});
+
 test('stops popups without a gesture and hijacked clicks', async ({ context, sw }) => {
   void sw;
   const page = await context.newPage();

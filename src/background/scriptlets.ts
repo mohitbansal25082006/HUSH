@@ -1,6 +1,5 @@
 /**
- * Registers MAIN-world content scripts: compiled scriptlet bundles, the popup guard and the
- * Twitch ad stripper.
+ * Registers compiled scriptlet bundles, the popup guard and the Twitch ad curtain.
  *
  * The bundles carry ~100k host match patterns. Chrome rewrites its whole persisted script store
  * on every change, which made each change take tens of seconds, so bundles are registered for the
@@ -50,7 +49,7 @@ const BASE = {
 function signature(s: Script, build: string): string {
   // Bundle match lists come from the build, so the build id stands in for them.
   const matches = s.id === `${PREFIX}guard` || s.id === `${PREFIX}twitch` ? s.matches : build;
-  return JSON.stringify([s.js, matches, s.excludeMatches ?? [], s.allFrames]);
+  return JSON.stringify([s.js, matches, s.excludeMatches ?? [], s.allFrames, s.world]);
 }
 
 async function register(list: Script[]): Promise<number> {
@@ -99,7 +98,7 @@ export async function syncContentScripts(
       wanted.push({ ...BASE, id: `${PREFIX}guard`, js, matches: ['<all_urls>'], ...excl(paused) });
     }
     if (settings.twitch) {
-      wanted.push({ ...BASE, id: `${PREFIX}twitch`, js: ['content-scripts/twitch.js'], matches: ['*://*.twitch.tv/*'], allFrames: false, ...excl(paused) });
+      wanted.push({ ...BASE, id: `${PREFIX}twitch`, js: ['content-scripts/twitch.js'], matches: ['*://*.twitch.tv/*'], world: 'ISOLATED', allFrames: false, ...excl(paused) });
     }
     if (settings.scriptlets) {
       for (const r of await compiledRegistrations()) {
@@ -140,7 +139,7 @@ export async function syncContentScripts(
   return { registered: toAdd.length, updated: toUpdate.length, removed: toRemove.length, failed };
 }
 
-/* ------------------------- Runtime scriptlets (user filters / hotfix) ------------------------- */
+/* ------------------------- Runtime scriptlets (local user filters) --------------------------- */
 
 export interface RuntimeScriptlet {
   fn: string;

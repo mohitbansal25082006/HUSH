@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — 2026-11-28
+
+- Removed scriptlets that could rewrite script text or inject arbitrary response and argument payloads, including the Viafoura and Spot.IM loaders imported from uBlock Origin’s filters.
+- Twitch protection mutes and covers detected ads using bundled code. Removed player-worker rewriting.
+- Signed hotfixes now apply network and element-hiding filters only.
+- Added a remote-code check before store packaging and updated the store listing and privacy policy.
+
 ## 1.0.0 — 2026-10-20
 
 First release.

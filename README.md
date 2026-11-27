@@ -5,9 +5,8 @@
 <br>
 
 <a href="https://github.com/mohitbansal25082006/HUSH/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mohitbansal25082006/HUSH/ci.yml?branch=main&style=for-the-badge&label=build&labelColor=1b1530&color=7ef0c8" alt="Build status"></a>
-<a href="https://github.com/mohitbansal25082006/HUSH/releases"><img src="https://img.shields.io/badge/version-1.0.0-fff1d0?style=for-the-badge&labelColor=1b1530" alt="Version 1.0.0"></a>
+<a href="https://github.com/mohitbansal25082006/HUSH/releases"><img src="https://img.shields.io/badge/version-1.0.1-fff1d0?style=for-the-badge&labelColor=1b1530" alt="Version 1.0.1"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-c9b8ff?style=for-the-badge&labelColor=1b1530" alt="License: GPL-3.0-or-later"></a>
-<a href="https://adblock.turtlecute.org/"><img src="https://img.shields.io/badge/ad%20block%20test-132%2F132-7ef0c8?style=for-the-badge&labelColor=1b1530" alt="132 of 132 on adblock.turtlecute.org"></a>
 <br>
 <a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk"><img src="https://img.shields.io/chrome-web-store/v/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&logo=googlechrome&logoColor=fff1d0&label=Chrome%20Web%20Store&labelColor=1b1530&color=fff1d0" alt="HUSH on the Chrome Web Store"></a>
 <a href="https://chromewebstore.google.com/detail/backfoaleenglihmgpeffmmpepphlfkk"><img src="https://img.shields.io/chrome-web-store/users/backfoaleenglihmgpeffmmpepphlfkk?style=for-the-badge&label=users&labelColor=1b1530&color=c9b8ff" alt="Chrome Web Store users"></a>
@@ -17,7 +16,7 @@
 <img src="https://img.shields.io/badge/Brave-supported-c9b8ff?style=for-the-badge&logo=brave&logoColor=fff1d0&labelColor=1b1530" alt="Brave">
 <img src="https://img.shields.io/badge/Edge-supported-c9b8ff?style=for-the-badge&logo=microsoftedge&logoColor=fff1d0&labelColor=1b1530" alt="Edge">
 <img src="https://img.shields.io/badge/Manifest-V3-ff7a9c?style=for-the-badge&labelColor=1b1530" alt="Manifest V3">
-<a href="PRIVACY.md"><img src="https://img.shields.io/badge/data%20collected-none-ff7a9c?style=for-the-badge&labelColor=1b1530" alt="No data collected"></a>
+<a href="PRIVACY.md"><img src="https://img.shields.io/badge/browsing%20data-stays%20on%20device-ff7a9c?style=for-the-badge&labelColor=1b1530" alt="Browsing data stays on your device"></a>
 
 <br><br>
 
@@ -31,9 +30,7 @@
 
 ### The web is loud. HUSH turns it down.
 
-HUSH blocks ads, popups, trackers, cookie banners and anti-adblock walls before they load. It needs no setup and collects no data, and Hushy, its moon-ghost, keeps you company.
-
-<img src="docs/readme/stats.svg" width="100%" alt="132 of 132 checks blocked on adblock.turtlecute.org; 58 thousand native rules; 0.8 seconds to pause or fix any site; 0 bytes of your data collected">
+HUSH blocks ads, popups and trackers, rejects cookie banners, and hides anti-adblock prompts. It works with no setup and processes browsing data locally.
 
 </div>
 
@@ -49,17 +46,17 @@ HUSH blocks ads, popups, trackers, cookie banners and anti-adblock walls before 
 
 | | What HUSH does |
 | :-- | :-- |
-| **Ads and trackers** | Uses Chrome's native `declarativeNetRequest` engine with about 58,000 rules compiled from EasyList, EasyPrivacy, uBlock Origin filters, AdGuard, URLhaus and 7 regional lists. Blocking happens inside the browser, before a request leaves it. |
+| **Ads and trackers** | Uses Chrome's native `declarativeNetRequest` engine with rules compiled from EasyList, EasyPrivacy, uBlock Origin filters, AdGuard, URLhaus and seven regional lists. Chrome blocks matching requests inside the browser. |
 | **Leftover ad boxes** | Hides empty slots and sponsored posts with host-specific, generic and procedural filters (`:has-text`, `:upward`, `:xpath`…), applied before the first paint. |
 | **Popups and popunders** | Closes ad tabs as they open, and stops `window.open` abuse, hijacked clicks and invisible click-trap overlays. |
 | **YouTube** | Strips ads from the player data. Anything that slips through is muted and skipped, and the "ad blockers are not allowed" dialog is removed. |
-| **Twitch** | Swaps stream ads for an ad-free feed, or mutes and covers them when that isn't possible. |
+| **Twitch** | Mutes and covers ads when the Twitch player identifies an ad break. |
 | **Cookie banners** | Clicks "reject" for you on about 30 consent platforms, and hides what's left. |
-| **Anti-adblock walls** | About 50 scriptlets in uBlock Origin syntax, plus harmless stand-ins for blocked ad SDKs (Google IMA, adsbygoogle, GPT, BlockAdBlock, FingerprintJS, VAST/VMAP), so pages and video players keep working. |
+| **Anti-adblock walls** | Bundled page fixes in uBlock Origin syntax, plus stand-ins for blocked ad SDKs (Google IMA, adsbygoogle, GPT, BlockAdBlock, FingerprintJS, VAST/VMAP), so pages and video players keep working. |
 | **Clean links** | Removes `utm_*`, `fbclid`, `gclid` and other tracking parameters from links you open. |
 | **Malware shield** | Replaces known malware and phishing pages with a clear warning. |
 | **Your own tools** | Element picker, one-time zapper, your own filters, paused sites, a live request log and a one-click "fix this site". |
-| **Hotfixes** | Optional signed filter updates (ECDSA P-256) for fixes between releases. Off by default. |
+| **Hotfixes** | Optional signed updates for network and element-hiding filters. The update address is empty by default. |
 
 </details>
 
@@ -88,6 +85,8 @@ HUSH blocks ads, popups, trackers, cookie banners and anti-adblock walls before 
 
 </div>
 
+HUSH 1.0.1 passed all 130 checks in the November 28, 2026 ad-blocking benchmark run. [Ad-blocking benchmark](https://adblock.turtlecute.org/)
+
 <img src="docs/readme/divider.svg" width="100%" alt="">
 
 ## Install
@@ -99,7 +98,7 @@ HUSH blocks ads, popups, trackers, cookie banners and anti-adblock walls before 
 
 **From a release:**
 
-1. Download `hush-1.0.0-chrome.zip` from [the latest release](https://github.com/mohitbansal25082006/HUSH/releases/latest) and unzip it.
+1. Download the `hush-<version>-chrome.zip` asset from [GitHub Releases](https://github.com/mohitbansal25082006/HUSH/releases) and unzip it.
 2. Open `chrome://extensions`. In Brave, open `brave://extensions`; in Edge, `edge://extensions`.
 3. Turn on **Developer mode**, click **Load unpacked** and choose the unzipped folder.
 4. Pin HUSH from the puzzle-piece menu. Hushy says hello, and you're protected.
@@ -125,11 +124,11 @@ Load `.output/chrome-mv3` with **Load unpacked**. After every rebuild, click rel
 | :-- | :-- |
 | `npm run dev` | Rebuild on every change (load `.output/chrome-mv3-dev` once) |
 | `npm run filters:offline` | Recompile from the cached lists without downloading |
-| `npm test` | Unit tests for the filter parser |
+| `npm test` | Unit tests for filters and packaging checks |
 | `npm run test:e2e` | End-to-end tests in Chromium with the built extension |
 | `npm run test:live` | Checks on real sites: the benchmark, YouTube, Twitch and a news site |
 | `npm run check` | Type check |
-| `npm run release` | Fresh lists, icons, build and the store zip in `.output/` |
+| `npm run release` | Refresh lists and icons, build, check and package the store ZIP in `.output/` |
 | `npm run store:assets` | Render the Chrome Web Store screenshots and promo tiles |
 | `npm run readme:assets` | Render the animated README artwork and the demo recording |
 
@@ -143,9 +142,9 @@ Load `.output/chrome-mv3` with **Load unpacked**. After every rebuild, click rel
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#251d42','primaryTextColor':'#fff1d0','primaryBorderColor':'#8b6cff','lineColor':'#c9b8ff','secondaryColor':'#2e2552','tertiaryColor':'#1b1530','fontFamily':'ui-sans-serif, system-ui'}}}%%
 flowchart LR
     L["Filter lists<br/>EasyList, uBlock, AdGuard,<br/>regional, HUSH's own"] --> C{{"HUSH compiler<br/>(build time)"}}
-    C --> R["Native rulesets<br/>~58k DNR rules"]
+    C --> R["Native network rulesets"]
     C --> K["Cosmetic database<br/>sharded per site"]
-    C --> S["Scriptlet bundles<br/>~50 page fixes"]
+    C --> S["Bundled page fixes"]
     R --> B(("Chrome's<br/>blocking engine"))
     K --> P["Page<br/>(before first paint)"]
     S --> P
@@ -157,9 +156,9 @@ flowchart LR
     class P calm
 ```
 
-- **At build time**, the compiler turns hundreds of thousands of list filters into Chrome's native rule format. It checks every regex against a real Chromium, so Chrome never skips a rule.
-- **In the browser**, Chrome's own engine blocks requests. HUSH never sees your traffic, and pages pay no JavaScript cost for blocking.
-- **On the page**, cosmetic CSS lands before the first paint, and scriptlets run before the site's own scripts.
+- **At build time**, the compiler converts supported filters into Chrome's native rule format and checks regular expressions against Chromium.
+- **In the browser**, Chrome's own engine blocks requests without running HUSH's JavaScript for each match. HUSH uses browser-reported request URLs and outcomes to show blocking activity locally.
+- **On the page**, HUSH applies cosmetic CSS and runs bundled page fixes early. The compiler supports a defined set of scriptlets. The store packaging step checks the built files for common remote-code loaders.
 
 <details>
 <summary><b>Project layout</b></summary>
@@ -188,7 +187,7 @@ tests/               Vitest unit tests and Playwright end-to-end / live tests
 <summary><b>Hotfixes, for maintainers</b></summary>
 <br>
 
-Hotfixes are signed filter text, never code: they're compiled as untrusted, so they can't use scriptlets that carry code.
+Hotfixes accept network rules and ordinary element-hiding selectors. HUSH verifies the ECDSA P-256 signature before applying those rules. Scriptlet changes ship with extension updates.
 
 ```bash
 npm run hotfix:keys                          # once: keys/hotfix-private.jwk (never commit) + src/shared/hotfix-key.ts
@@ -204,7 +203,7 @@ Set the address in **Dashboard → Filter lists → Hotfix address**.
 
 ## Privacy
 
-HUSH has no accounts, analytics or ads, and makes no network requests of its own. Your statistics stay in your browser. Read the full [privacy policy](PRIVACY.md).
+HUSH uses page content and request URLs to filter websites and show blocking activity. Your data stays in your browser. HUSH contacts a hotfix server only if you configure one. [Privacy policy](PRIVACY.md)
 
 <details>
 <summary><b>Why HUSH asks for each permission</b></summary>
@@ -213,9 +212,9 @@ HUSH has no accounts, analytics or ads, and makes no network requests of its own
 | Permission | Why |
 | :-- | :-- |
 | Access to all sites | Ads and trackers appear on every site, so HUSH must be able to clean any page you visit. |
-| `declarativeNetRequest` | Chrome's built-in blocker: rules run inside the browser and HUSH never sees your traffic. |
+| `declarativeNetRequest` | Lets Chrome apply HUSH's blocking rules inside the browser. |
 | `scripting` | Runs the bundled page fixes that defeat popunders and anti-adblock walls. |
-| `webRequest` | Counts blocked requests for the badge and the dashboard. It only observes. |
+| `webRequest` | Observes request URLs and outcomes for the badge, dashboard and on-device request log. |
 | `tabs`, `webNavigation` | Closes popunder tabs, and shows statistics for the current tab. |
 | `storage`, `unlimitedStorage` | Keeps your settings, statistics and the compiled filter data on your device. |
 | `alarms` | Schedules the optional hotfix check. |
@@ -254,7 +253,7 @@ Yes. Ads are removed from the player data, and any that appear anyway are muted 
 <details>
 <summary><b>Why does HUSH need access to every site?</b></summary>
 <br>
-Ads appear on every site. HUSH uses that access only to block and hide them on your device. Nothing is sent anywhere.
+Ads appear on every site. HUSH uses that access to filter requests, hide unwanted page elements and show blocking activity locally.
 </details>
 
 <details>

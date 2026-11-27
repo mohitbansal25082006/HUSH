@@ -1,6 +1,7 @@
 import { defineConfig } from 'wxt';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { checkStoreBuild } from './compiler/check-store-build';
 
 // Rulesets are produced by `npm run filters` (compiler/build-filters.ts).
 // The compiler writes a small index so the manifest always matches what is on disk.
@@ -19,13 +20,16 @@ export default defineConfig({
   entrypointsDir: 'entrypoints',
   publicDir: 'public',
   outDir: '.output',
+  hooks: {
+    'zip:extension:start': (wxt) => checkStoreBuild(wxt.config.outDir),
+  },
   // Branded Chrome ignores --load-extension, so dev mode only builds; load the folder once by hand.
   webExt: { disabled: true },
   manifest: {
     name: 'HUSH — Ad & Popup Blocker',
     short_name: 'HUSH',
     description:
-      'Silence the web. Blocks ads, popups, popunders, trackers, YouTube & Twitch ads, cookie banners and anti-adblock walls.',
+      'Blocks ads, popups, trackers and cookie banners. Helps with YouTube ads, mutes Twitch ads and hides anti-adblock prompts.',
     version: pkg.version,
     homepage_url: pkg.homepage,
     minimum_chrome_version: '122',

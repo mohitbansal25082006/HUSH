@@ -220,7 +220,7 @@ function features() {
 <path d="M24 30 L40 46 M40 30 L24 46" stroke="${C.coral}" stroke-width="4" stroke-linecap="round" class="xmark"/></g>`,
     },
     {
-      title: 'YouTube and Twitch', l1: 'Ads stripped from the player data;', l2: 'anything left is muted and skipped.', color: C.coral,
+      title: 'YouTube and Twitch', l1: 'YouTube ad blocking and skipping.', l2: 'Detected Twitch ads are muted.', color: C.coral,
       icon: `<rect x="6" y="12" width="52" height="34" rx="10" fill="${C.coral}"/>
 <path d="M27 21 L41 29 L27 37 Z" fill="${C.ink}"/>
 <rect x="6" y="52" width="52" height="5" rx="2.5" fill="${C.coral}" fill-opacity=".25"/>
@@ -309,7 +309,7 @@ function features() {
   <text x="24" y="184" font-family="F" font-weight="500" font-size="15.5" fill="${C.lilac}">${it.l2}</text>
 </g></g>`;
   }).join('\n');
-  writeFileSync(join(OUT, 'features.svg'), svg(W, H, 'Blocks ads and trackers, popups, YouTube and Twitch ads, cookie banners, anti-adblock walls, tracking parameters and malware; includes an element picker; private by design', style, body));
+  writeFileSync(join(OUT, 'features.svg'), svg(W, H, 'Ad and tracker blocking, popup blocking, YouTube ad blocking, Twitch ad muting, cookie banners, anti-adblock prompts, tracking links, malware warnings and an element picker', style, body));
 }
 
 /* ---------------------------------------------------------------------------------------- */

@@ -74,7 +74,7 @@ async function boot() {
   const isTop = window.top === window;
   // The MAIN-world popup guard reports what it stopped through a DOM event.
   document.addEventListener('hush:popup', (e) => send({ type: 'popupBlocked', url: String((e as CustomEvent).detail ?? ''), reason: 'guard' }));
-  // The Twitch shield reports stitched-in ads it swapped out (once per ad break).
+  // The Twitch shield reports ads it muted and covered (once per ad break).
   let lastTwitchAd = 0;
   document.addEventListener('hush:twitch-ad', () => {
     if (Date.now() - lastTwitchAd < 30_000) return;

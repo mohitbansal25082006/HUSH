@@ -3,7 +3,7 @@
  * worker with the same parser used at build time:
  *   network   → dynamic DNR rules
  *   cosmetic  → `c:rt` database read by content scripts
- *   scriptlet → injected on navigation via chrome.scripting
+ *   scriptlet → local user filters only, injected on navigation via chrome.scripting
  *   popup     → merged into the popup guard
  */
 import { parseFilter, preprocess, PREPROCESSOR_ENV, type DnrRule, type PopupFilter } from '../filters/parser';
@@ -26,7 +26,7 @@ export interface CompiledRuntime {
 
 const ALIASES = SCRIPTLET_ALIASES as Record<string, string>;
 
-export function compileRuntimeFilters(text: string, trusted: boolean): CompiledRuntime {
+export function compileRuntimeFilters(text: string, source: 'user' | 'hotfix'): CompiledRuntime {
   const out: CompiledRuntime = {
     network: [],
     cosmetic: { hosts: {}, generic: [] },
@@ -39,8 +39,10 @@ export function compileRuntimeFilters(text: string, trusted: boolean): CompiledR
   const lines = preprocess(text, PREPROCESSOR_ENV);
   const exceptions: string[] = [];
   lines.forEach((line, i) => {
-    const parsed = parseFilter(line, { trusted, redirects: REDIRECTS });
+    const parsed = parseFilter(line, { trusted: source === 'user', redirects: REDIRECTS });
     if (!parsed) return;
+    // Downloaded filters may only configure DNR or hide elements using ordinary CSS selectors.
+    if (source === 'hotfix' && parsed.type !== 'network' && !(parsed.type === 'cosmetic' && parsed.filter.kind === 'hide')) return;
     switch (parsed.type) {
       case 'skip':
         out.errors.push({ line: i + 1, text: line, reason: parsed.reason });
@@ -68,7 +70,7 @@ export function compileRuntimeFilters(text: string, trusted: boolean): CompiledR
             break;
           }
           const fn = ALIASES[f.body];
-          if (!fn) {
+          if (!Object.hasOwn(ALIASES, f.body)) {
             out.errors.push({ line: i + 1, text: line, reason: `unknown scriptlet ${f.body}` });
             break;
           }

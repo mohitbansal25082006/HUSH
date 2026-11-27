@@ -646,7 +646,7 @@ function parseCosmetic(raw: string, sepIndex: number, sep: string, opts: ParseOp
     }
     name = name.replace(/\.js$/, '');
     if (!name) return { type: 'skip', reason: 'scriptlet:empty', raw };
-    // Scriptlets whose arguments can carry code only come from trusted sources (bundled lists and
+    // Scriptlets marked trusted only come from trusted sources (bundled lists and
     // the user's own filters), never from data fetched at runtime.
     if ((name.startsWith('trusted-') || name === 'rpnt' || name === 'replace-node-text') && !opts.trusted && !exception) {
       return { type: 'skip', reason: 'scriptlet:untrusted', raw };

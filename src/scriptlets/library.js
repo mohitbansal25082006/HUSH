@@ -3,8 +3,7 @@
  *
  * Every function here is injected into web pages (MAIN world). Each one MUST be fully
  * self-contained: it is serialised with Function.prototype.toString(), so it cannot reference
- * anything outside its own body. Signatures follow uBlock Origin's scriptlet conventions so that
- * existing filter lists work unchanged.
+ * anything outside its own body. Supported signatures follow uBlock Origin's conventions.
  */
 
 /* eslint-disable no-new-func, prefer-rest-params */
@@ -363,7 +362,7 @@ export function preventFetch(pattern = '', responseBody = '', responseType = '')
     if (i > 0 && /^[a-z]+$/.test(tok.slice(0, i))) conditions.push([tok.slice(0, i), toRe(tok.slice(i + 1))]);
     else conditions.push(['url', toRe(tok)]);
   }
-  const body = responseBody === 'emptyObj' ? '{}' : responseBody === 'emptyArr' ? '[]' : responseBody === 'emptyStr' ? '' : responseBody;
+  const body = responseBody === 'emptyObj' ? '{}' : responseBody === 'emptyArr' ? '[]' : /^(?:true|false|null)$/.test(responseBody) ? responseBody : '';
   const nativeFetch = window.fetch;
   window.fetch = new Proxy(nativeFetch, {
     apply(target, thisArg, args) {
@@ -394,7 +393,7 @@ export function preventXhr(pattern = '', responseBody = '') {
     const i = tok.indexOf(':');
     return i > 0 && /^[a-z]+$/.test(tok.slice(0, i)) ? [tok.slice(0, i), toRe(tok.slice(i + 1))] : ['url', toRe(tok)];
   });
-  const body = responseBody === 'emptyObj' ? '{}' : responseBody === 'emptyArr' ? '[]' : responseBody;
+  const body = responseBody === 'emptyObj' ? '{}' : responseBody === 'emptyArr' ? '[]' : /^(?:true|false|null)$/.test(responseBody) ? responseBody : '';
   const blocked = new WeakSet();
   const proto = XMLHttpRequest.prototype;
   const open = proto.open;
@@ -575,8 +574,9 @@ export function removeClass(classes = '', selector = '', behavior = '') {
 }
 
 export function setAttr(selector = '', attr = '', value = '') {
-  if (!selector || !attr) return;
-  if (!/^(|true|false|on|off|\d+|''|"")$/.test(value) && !value.startsWith('[')) return;
+  // Filter arguments may set inert state, including data and accessibility markers.
+  if (!selector || !/^(?:(?:data|aria)-[\w-]+|autoplay|controls|hidden|muted|disabled|rlhc)$/i.test(attr)) return;
+  if (!/^(|true|false|on|off|\d+|''|"")$/.test(value) && !/^\[[\w-]+\]$/.test(value)) return;
   const run = () => {
     try { for (const el of document.querySelectorAll(selector)) el.setAttribute(attr, value.replace(/^''|""$/, '')); } catch (e) {}
   };
@@ -685,59 +685,6 @@ export function trustedSetConstant(chain = '', rawValue = '') {
   trap(window, 0);
 }
 
-export function trustedReplaceFetchResponse(pattern = '', replacement = '', propsToMatch = '') {
-  if (!pattern) return;
-  const m = /^\/(.+)\/([gimsu]*)$/.exec(pattern);
-  const re = pattern === '*' ? /[\s\S]*/ : m ? new RegExp(m[1], m[2]) : new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-  const pm = propsToMatch.replace(/^url:/, '');
-  const pmm = /^\/(.+)\/([gimsu]*)$/.exec(pm);
-  const urlRe = pm ? (pmm ? new RegExp(pmm[1], pmm[2]) : null) : null;
-  const match = (u) => !pm || (urlRe ? urlRe.test(u) : u.includes(pm));
-  const nativeFetch = window.fetch;
-  window.fetch = new Proxy(nativeFetch, {
-    apply(target, thisArg, args) {
-      const p = Reflect.apply(target, thisArg, args);
-      let url = '';
-      try { url = args[0] instanceof Request ? args[0].url : String(args[0]); } catch (e) {}
-      if (!match(url)) return p;
-      return p.then((resp) => resp.clone().text().then((text) => {
-        const out = new Response(text.replace(re, replacement), { status: resp.status, statusText: resp.statusText, headers: resp.headers });
-        Object.defineProperty(out, 'url', { value: resp.url });
-        Object.defineProperty(out, 'type', { value: resp.type });
-        return out;
-      }).catch(() => resp));
-    },
-  });
-}
-
-export function trustedReplaceXhrResponse(pattern = '', replacement = '', propsToMatch = '') {
-  if (!pattern) return;
-  const m = /^\/(.+)\/([gimsu]*)$/.exec(pattern);
-  const re = pattern === '*' ? /[\s\S]*/ : m ? new RegExp(m[1], m[2]) : new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-  const pm = propsToMatch.replace(/^url:/, '');
-  const pmm = /^\/(.+)\/([gimsu]*)$/.exec(pm);
-  const urlRe = pm && pmm ? new RegExp(pmm[1], pmm[2]) : null;
-  const match = (u) => !pm || (urlRe ? urlRe.test(u) : u.includes(pm));
-  const urls = new WeakMap();
-  const open = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-    urls.set(this, String(url));
-    return open.call(this, method, url, ...rest);
-  };
-  for (const name of ['response', 'responseText']) {
-    const desc = Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype, name);
-    if (!desc || !desc.get) continue;
-    Object.defineProperty(XMLHttpRequest.prototype, name, {
-      configurable: true,
-      get() {
-        const v = desc.get.call(this);
-        if (this.readyState !== 4 || typeof v !== 'string' || !match(urls.get(this) || '')) return v;
-        return v.replace(re, replacement);
-      },
-    });
-  }
-}
-
 export function trustedClickElement(selectors = '', extraMatch = '', delay = '') {
   if (!selectors) return;
   const list = selectors.split(/\s*,\s*(?![^[]*\])/).filter(Boolean);
@@ -790,6 +737,7 @@ export function hrefSanitizer(selector = '', source = '') {
   if (!selector) return;
   const run = () => {
     for (const a of document.querySelectorAll(selector)) {
+      if (!(a instanceof HTMLAnchorElement)) continue;
       let href = '';
       if (!source || source === 'text') href = a.textContent.trim();
       else if (source.startsWith('?')) { try { href = new URL(a.href).searchParams.get(source.slice(1)) || ''; } catch (e) {} }
@@ -851,25 +799,12 @@ export function removeNodeText(nodeName = '', includes = '', ...extra) {
   const reText = includes ? toRe(includes, '') : null;
   const params = {};
   for (let i = 0; i < extra.length; i += 2) params[extra[i]] = extra[i + 1];
-  // Script nodes on Trusted Types pages (YouTube, Google) only accept TrustedScript. Going
-  // through a policy first avoids the violation Chrome logs for a plain (even caught) write.
-  let policy = null;
-  const setText = (node, text) => {
-    const tt = window.trustedTypes;
-    if (tt && node.nodeName === 'SCRIPT') {
-      try {
-        policy = policy || tt.createPolicy('hush-' + Math.random().toString(36).slice(2), { createScript: (s) => s });
-        node.textContent = policy.createScript(text);
-      } catch (e) {}
-      return;
-    }
-    try { node.textContent = text; } catch (e) {}
-  };
   const handle = (node) => {
     if (!reNode.test(node.nodeName)) return;
     const text = node.textContent || '';
     if (!text || (reText && !reText.test(text))) return;
-    setText(node, '');
+    if (node.nodeType === 1) node.replaceChildren();
+    else node.textContent = '';
   };
   const obs = new MutationObserver((records) => {
     for (const r of records) for (const n of r.addedNodes) {
@@ -889,69 +824,6 @@ export function closeWindow(pathname = '') {
   const m = /^\/(.+)\/([gimsu]*)$/.exec(pathname);
   if (pathname && !(m ? new RegExp(m[1], m[2]) : new RegExp(pathname.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))).test(location.pathname)) return;
   try { window.close(); } catch (e) {}
-}
-
-export function replaceNodeText(nodeName = '', pattern = '', replacement = '', ...extra) {
-  if (!nodeName || !pattern) return;
-  // uBO semantics: extra args `condition`/`includes`, `excludes`, `sedCount` (stop after N
-  // rewrites) and `stay` (keep watching after DOMContentLoaded).
-  const toRe = (s, flags) => {
-    const m = /^\/(.+)\/([gimsu]*)$/.exec(s);
-    return m ? new RegExp(m[1], m[2]) : new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags);
-  };
-  const reNode = new RegExp('^' + nodeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\*/g, '.*') + '$', 'i');
-  const re = toRe(pattern, 'g');
-  const params = {};
-  for (let i = 0; i < extra.length; i += 2) params[extra[i]] = extra[i + 1];
-  const cond = params.condition || params.includes ? toRe(params.condition || params.includes, '') : null;
-  const excl = params.excludes ? toRe(params.excludes, '') : null;
-  let left = Number(params.sedCount) || 0;
-  let policy = null;
-  const setText = (node, text) => {
-    const tt = window.trustedTypes;
-    if (tt && node.nodeName === 'SCRIPT') {
-      try {
-        policy = policy || tt.createPolicy('hush-' + Math.random().toString(36).slice(2), { createScript: (s) => s });
-        node.textContent = policy.createScript(text);
-      } catch (e) {}
-      return;
-    }
-    try { node.textContent = text; } catch (e) {}
-  };
-  // Each node is rewritten once: our own write re-triggers the observer, and a replacement that
-  // still matches the pattern would otherwise loop forever.
-  const done = new WeakSet();
-  let obs = null;
-  const handle = (node) => {
-    if (done.has(node) || !reNode.test(node.nodeName)) return;
-    const text = node.textContent || '';
-    if (!text || (cond && !cond.test(text)) || (excl && excl.test(text))) return;
-    re.lastIndex = 0;
-    if (!re.test(text)) return;
-    re.lastIndex = 0;
-    const next = text.replace(re, replacement);
-    done.add(node);
-    if (next === text) return;
-    setText(node, next);
-    if (left > 0 && --left === 0 && obs) obs.disconnect();
-  };
-  const visit = (n) => {
-    if (n.nodeType === 3) {
-      if (reNode.test('#text')) handle(n);
-      else if (n.parentNode) handle(n.parentNode);
-      return;
-    }
-    handle(n);
-  };
-  obs = new MutationObserver((records) => {
-    for (const r of records) for (const n of r.addedNodes) visit(n);
-  });
-  obs.observe(document, { childList: true, subtree: true });
-  if (document.readyState !== 'loading') for (const n of document.querySelectorAll('*')) handle(n);
-  if (params.stay === '1') return;
-  const quit = () => obs.disconnect();
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', quit, { once: true });
-  else quit();
 }
 
 export function removeCookie(needle = '') {
@@ -989,36 +861,6 @@ export function setCookieReload(name = '', value = '', path = '/') {
   document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; path=${path === 'none' ? '/' : path}; max-age=31536000; SameSite=Lax`;
   const after = document.cookie.split(';').map((c) => c.trim()).find((c) => c.startsWith(encodeURIComponent(name) + '='));
   if (after && after.split('=')[1] === encodeURIComponent(value)) location.reload();
-}
-
-export function trustedReplaceArgument(chain = '', argpos = '', argraw = '', ...extra) {
-  if (!chain) return;
-  const params = {};
-  for (let i = 0; i < extra.length; i += 2) params[extra[i]] = extra[i + 1];
-  const pos = parseInt(argpos || '0', 10);
-  let value;
-  if (argraw === 'undefined') value = undefined;
-  else if (argraw === 'true') value = true;
-  else if (argraw === 'false') value = false;
-  else if (argraw === 'null') value = null;
-  else if (argraw === 'noopFunc') value = function () {};
-  else if (/^-?\d+$/.test(argraw)) value = Number(argraw);
-  else if (argraw.startsWith('json:')) { try { value = JSON.parse(argraw.slice(5)); } catch (e) { return; } }
-  else value = argraw;
-  const cond = params.condition ? (() => { const c = /^\/(.+)\/([gimsu]*)$/.exec(params.condition); return c ? new RegExp(c[1], c[2]) : new RegExp(params.condition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); })() : null;
-  const parts = chain.replace(/^window\./, '').split('.');
-  const prop = parts.pop();
-  let owner = window;
-  for (const p of parts) { owner = owner[p]; if (!(owner instanceof Object)) return; }
-  const original = owner[prop];
-  if (typeof original !== 'function') return;
-  owner[prop] = new Proxy(original, {
-    apply(target, thisArg, args) {
-      const i = pos >= 0 ? pos : args.length + pos;
-      if (i >= 0 && i < args.length && (!cond || cond.test(String(args[i])))) args[i] = value;
-      return Reflect.apply(target, thisArg, args);
-    },
-  });
 }
 
 /** uBO names (and aliases) → HUSH implementation names. */
@@ -1079,9 +921,6 @@ export const SCRIPTLET_ALIASES = {
   'trusted-set-cookie': 'trustedSetCookie',
   'trusted-set-local-storage-item': 'trustedSetLocalStorageItem',
   'trusted-set-constant': 'trustedSetConstant',
-  'trusted-replace-fetch-response': 'trustedReplaceFetchResponse',
-  'trusted-rpfr': 'trustedReplaceFetchResponse',
-  'trusted-replace-xhr-response': 'trustedReplaceXhrResponse',
   'trusted-click-element': 'trustedClickElement',
   'spoof-css': 'spoofCss',
   'href-sanitizer': 'hrefSanitizer',
@@ -1090,16 +929,11 @@ export const SCRIPTLET_ALIASES = {
   'nowebrtc': 'noWebrtc',
   'remove-node-text': 'removeNodeText',
   'rmnt': 'removeNodeText',
-  'replace-node-text': 'replaceNodeText',
-  'rpnt': 'replaceNodeText',
-  'trusted-replace-node-text': 'replaceNodeText',
-  'trusted-rpnt': 'replaceNodeText',
   'remove-cookie': 'removeCookie',
   'cookie-remover': 'removeCookie',
   'noeval': 'noEval',
   'silent-noeval': 'noEval',
   'set-cookie-reload': 'setCookieReload',
-  'trusted-replace-argument': 'trustedReplaceArgument',
   'close-window': 'closeWindow',
   'window-close-if': 'closeWindow',
 };

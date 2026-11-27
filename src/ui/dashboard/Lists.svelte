@@ -85,7 +85,7 @@
     <div class="text">
       <div class="name">Hotfix updates</div>
       <div class="desc">
-        Signed filter fixes arrive every few hours, so new YouTube or Twitch tricks are handled without waiting for an extension update.
+        When you set an address, HUSH checks for signed network and element-hiding filters every few hours.
         {#if info?.hotfix?.checked}Last checked {fmtDate(info.hotfix.checked)}.{/if}
         {#if info?.hotfix?.error}<span class="err">Last check failed: {info.hotfix.error}.</span>{/if}
       </div>
