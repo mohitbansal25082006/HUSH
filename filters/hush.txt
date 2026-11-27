@@ -325,6 +325,9 @@ msn.com##div[class^="native-ad"]
 ! ---------------------------------------------------------------------------------------------
 ! Site fixes: upstream filters that break a site's own player
 ! ---------------------------------------------------------------------------------------------
+! MEGA needs native fetch responses from its API. The upstream video-ad filter reads the full
+! response before returning it to the client, even when there are no ads to remove.
+mega.nz#@#+js(json-prune-fetch-response, *, *.aurl, propsToMatch, /cs?id=)
 ! scat.gold reveals its lazy video iframe from a setTimeout that calls `.show()`
 scat.gold#@#+js(nostif, show)
 ! EasyList blocks all of imasdk.googleapis.com; players then wait forever for the SDK. Serve a

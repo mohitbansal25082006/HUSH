@@ -118,15 +118,18 @@ npm run filters                    # download and compile the filter lists (abou
 npm run build                      # the extension is written to .output/chrome-mv3
 ```
 
-Load `.output/chrome-mv3` with **Load unpacked**. After every rebuild, click reload ↻ on the HUSH card.
+Open `chrome://extensions`, turn on **Developer mode**, and use **Load unpacked** to select `.output/chrome-mv3` for release testing. For development testing, run `npm run build -- --mode development` and load `.output/chrome-mv3-dev`. After rebuilding, click **Reload** on the HUSH card and refresh the site.
+
+After editing `filters/hush.txt`, run `npm run filters:offline` before rebuilding so Chrome picks up the new filters.
 
 | Command | What it does |
 | :-- | :-- |
 | `npm run dev` | Rebuild on every change (load `.output/chrome-mv3-dev` once) |
+| `npm run build -- --mode development` | Build `.output/chrome-mv3-dev` once for manual testing |
 | `npm run filters:offline` | Recompile from the cached lists without downloading |
 | `npm test` | Unit tests for filters and packaging checks |
 | `npm run test:e2e` | End-to-end tests in Chromium with the built extension |
-| `npm run test:live` | Checks on real sites: the benchmark, YouTube, Twitch and a news site |
+| `npm run test:live` | Run the benchmark and check YouTube, Twitch, MEGA and a news site |
 | `npm run check` | Type check |
 | `npm run release` | Refresh lists and icons, build, check and package the store ZIP in `.output/` |
 | `npm run store:assets` | Render the Chrome Web Store screenshots and promo tiles |

@@ -82,6 +82,28 @@ test('mutes and covers detected Twitch ads without replacing the worker', async 
   await expect(curtain).toHaveCount(0);
 });
 
+test('leaves MEGA API responses untouched while protection is on', async ({ context, sw }) => {
+  void sw;
+  const page = await context.newPage();
+  await page.route('https://mega.nz/hush-test', (route) => route.fulfill({ contentType: 'text/html', body: '<title>MEGA</title>' }));
+  await page.route((url) => url.hostname === 'g.api.mega.co.nz' && url.pathname === '/cs', (route) => route.fulfill({
+    headers: { 'access-control-allow-origin': 'https://mega.nz' },
+    json: [{ result: 'ready' }],
+  }));
+  await page.goto('https://mega.nz/hush-test');
+  const result = await page.evaluate(async () => {
+    const originalClone = Response.prototype.clone;
+    let clones = 0;
+    Response.prototype.clone = function () {
+      clones++;
+      return originalClone.call(this);
+    };
+    const response = await fetch('https://g.api.mega.co.nz/cs?id=1');
+    return { body: await response.json(), clones, protection: Reflect.get(window, 'canRunAds') };
+  });
+  expect(result).toEqual({ body: [{ result: 'ready' }], clones: 0, protection: true });
+});
+
 test('stops popups without a gesture and hijacked clicks', async ({ context, sw }) => {
   void sw;
   const page = await context.newPage();

@@ -99,6 +99,8 @@ Publish the updated [privacy policy](../PRIVACY.md) at that URL before submittin
 
 Version 1.0.1 removes `scriptlets/hush-ads/replaceNodeText.js` and the scriptlet mechanism that generated the Viafoura and Spot.IM loaders. Twitch ad detection, muting and covering now use bundled code and the player UI. Signed hotfixes accept network filters and ordinary element-hiding selectors. The release build checks the package contents for common remote code loaders before creating the ZIP.
 
+This build also fixes MEGA loading by leaving its API responses untouched. Reviewers can open the public MEGA login page with HUSH enabled to verify that the form appears. [MEGA login](https://mega.nz/login)
+
 ## Distribution
 
 - Visibility: Public

@@ -2,6 +2,7 @@
 
 ## 1.0.1 — 2026-11-28
 
+- Fixed MEGA compatibility by leaving its API responses untouched while HUSH is enabled.
 - Removed scriptlets that could rewrite script text or inject arbitrary response and argument payloads, including the Viafoura and Spot.IM loaders imported from uBlock Origin’s filters.
 - Twitch protection mutes and covers detected ads using bundled code. Removed player-worker rewriting.
 - Signed hotfixes now apply network and element-hiding filters only.

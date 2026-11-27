@@ -18,13 +18,15 @@ Most fixes are a line in `filters/hush.txt`, which uses the uBlock Origin / AdGu
 - Prefer site-specific filters (`example.com##.ad`) to generic ones (`##.ad`).
 - To turn off an upstream filter on one site, use an exception, for example `example.com#@#+js(nostif, show)`.
 
-Then run:
+Recompile the filters and rebuild the unpacked version you want to test.
 
 ```bash
-npm run filters:offline && npm run build
+npm run filters:offline
+npm run build -- --mode development  # .output/chrome-mv3-dev for manual testing
+npm run build                       # .output/chrome-mv3 for Playwright and release testing
 ```
 
-Reload the extension in `chrome://extensions` and check the site.
+Reload HUSH in `chrome://extensions` and refresh the affected site. For MEGA, open its login page with HUSH enabled and check that the form appears. To run this check against the production build in Chromium, use `npm run test:live -- --grep "MEGA renders"`. [MEGA login](https://mega.nz/login)
 
 ## Change the code
 

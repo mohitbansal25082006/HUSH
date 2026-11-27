@@ -67,6 +67,13 @@ test('Twitch: HUSH registers the bundled ad curtain', async ({ context, sw }) =>
   expect(scripts).toMatchObject([{ world: 'ISOLATED', js: ['content-scripts/twitch.js'] }]);
 });
 
+test('MEGA renders the login form with HUSH enabled', async ({ context, sw }) => {
+  void sw;
+  const page = await context.newPage();
+  await page.goto('https://mega.nz/login', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('input[type="password"]:visible')).toHaveCount(1, { timeout: 45_000 });
+});
+
 test('a real news site: ad slots are hidden', async ({ context, sw }) => {
   void sw;
   const page = await context.newPage();
